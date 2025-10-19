@@ -14,7 +14,7 @@ add_includedirs("external/include")
 local GITHUB_SHA = os.getenv("GITHUB_SHA") or "Local"
 local SWIFTLY_VERSION = os.getenv("SWIFTLY_VERSION") or "Local"
 
-local sdk_path = "vendor/hl2sdk-cs2"
+local sdk_path = "vendor/s2sdk"
 local metamod_path = "vendor/metamod"
 
 function GetDistDirName()
