@@ -28,21 +28,6 @@
 
 #include <s2binlib/s2binlib.h>
 
-class EntityCheckTransmit
-{
-public:
-    CBitVec<MAX_EDICTS>* m_pTransmitEntity;	// 0
-    CBitVec<MAX_EDICTS>* m_pUnkBitVec;		// 8
-    CBitVec<MAX_EDICTS>* m_pUnkBitVec2;		// 16
-    CBitVec<MAX_EDICTS>* m_pUnkBitVec3;		// 24
-    CBitVec<MAX_EDICTS>* m_pTransmitAlways; // 32
-    CUtlVector<int> m_unk40;				// 40
-    vis_info_t* m_VisInfo;					// 64
-    [[maybe_unused]] byte m_unk72[0x1F8];	// 72
-    CEntityIndex m_nClientEntityIndex;		// 576
-    bool m_bFullUpdate;						// 580
-};
-
 class CUserCmd
 {
 public:
@@ -218,8 +203,8 @@ void CheckTransmitHook(void* _this, CCheckTransmitInfo** ppInfoList, int infoCou
     static auto playermanager = g_ifaceService.FetchInterface<IPlayerManager>(PLAYERMANAGER_INTERFACE_VERSION);
     for (int i = 0; i < infoCount; i++)
     {
-        auto& pInfo = (EntityCheckTransmit*&)ppInfoList[i];
-        int playerid = pInfo->m_nClientEntityIndex.Get();
+        auto& pInfo = ppInfoList[i];
+        int playerid = pInfo->m_nPlayerSlot.Get();
         if (!playermanager->IsPlayerOnline(playerid)) continue;
         auto player = playermanager->GetPlayer(playerid);
 
