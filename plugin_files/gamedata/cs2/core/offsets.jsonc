@@ -184,7 +184,7 @@
         "linux": 1
     },
     "IGameEventManager2::FireEvent": {
-        "windows": 8,
+        "windows": 7,
         "linux": 8
     },
     "CServerSideClient::ProcessRespondCvarValue": {
