@@ -1,102 +1,37 @@
-﻿using SwiftlyS2.Shared.Natives;
+using System.Collections.Concurrent;
+using SwiftlyS2.Shared.Natives;
 using SwiftlyS2.Shared.Players;
 
 namespace SwiftlyS2.Shared.Menus;
 
-public enum MenuType
-{
-    CenterMenu,
-};
-
 public interface IMenu
 {
-    /// <summary>
-    /// The title of the menu.
-    /// </summary>
     public string Title { get; set; }
-    /// <summary>
-    /// The maximum length of the title. (default: 32)
-    /// </summary>
-    public int MaxTitleLength { get; set; }
-    /// <summary>
-    /// The options in the menu. Not supposed to be modified manually.
-    /// </summary>
-    public List<IMenuOption> Options { get; set; }
-    /// <summary>
-    /// Whether to freeze the player while the menu is open.
-    /// </summary>
-    public bool? FreezePlayer { get; set; }
-    /// <summary>
-    /// Whether the menu has sound effects.
-    /// </summary>
-    public bool HasSound { get; set; }
-    /// <summary>
-    /// The parent menu if this is a submenu.
-    /// </summary>
-    public IMenu? ParentMenu { get; set; }
-    /// <summary>
-    /// Whether the menu can be exited.
-    /// </summary>
-    public bool CanExit { get; set; }
-    /// <summary>
-    /// The kind of the menu.
-    /// </summary>
-    public MenuType Kind { get; set; }
-    /// <summary>
-    /// The color of the menu.
-    /// </summary>
-    public Color Color { get; set; }
-    /// <summary>
-    /// The text to render to the user.
-    /// </summary>
-    public string? RenderText { get; }
-    /// <summary>
-    /// The current item selected.
-    /// </summary>
-    public int CurrentIndex { get; set; }
+    public List<IOption> Options { get; }
+    public IMenu? Parent { get; set; }
+    public ConcurrentDictionary<IPlayer, CancellationTokenSource?> AutoCloseCancelTokens { get; set; }
+    public IMenuButtonOverrides? ButtonOverrides { get; set; }
+    public int MaxVisibleOptions { get; set; }
+    public bool? ShouldFreeze { get; set; }
+    public bool? CloseOnSelect { get; set; }
+    public Color RenderColor { get; set; }
+    public IMenuManager MenuManager { get; }
+    public float AutoCloseAfter { get; set; }
 
-    /// <summary>
-    /// Add an option to the menu.
-    /// </summary>
-    /// <param name="display">Text to display</param>
-    /// <param name="onChoice">Use Callback</param>
-    /// <param name="defaultDisabled">Make it disabled by default</param>
-    /// <returns>Menu Option</returns>
-    public ref IMenuOption AddOption(string display, Action<IPlayer, IMenuOption, IMenu>? onChoice, bool defaultDisabled = false);
-    /// <summary>
-    /// Add a boolean option to the menu.
-    /// </summary>
-    /// <param name="display">Text to display</param>
-    /// <param name="defaultValue">Default value</param>
-    /// <param name="onChoice">Use Callback</param>
-    /// <param name="defaultDisabled">Make it disabled by default</param>
-    /// <returns>Menu Option</returns>
-    public ref IMenuOption AddBoolOption(string display, bool defaultValue, Action<IPlayer, IMenuOption, IMenu>? onChoice, bool defaultDisabled = false);
-    /// <summary>
-    /// Add an input option to the menu.
-    /// </summary>
-    /// <param name="display">Text to display</param>
-    /// <param name="placeholder">Placeholder text</param>
-    /// <param name="inputRequestMessage">Input request message</param>
-    /// <param name="onInput">Use Callback</param>
-    /// <param name="defaultDisabled">Make it disabled by default</param>
-    /// <returns>Menu Option</returns>
-    public ref IMenuOption AddInputOption(string display, string placeholder, string? inputRequestMessage, Action<IPlayer, IMenuOption, IMenu, string>? onInput, bool defaultDisabled = false);
-    /// <summary>
-    /// Add a slider option to the menu.
-    /// </summary>
-    /// <param name="display">Text to display</param>
-    /// <param name="values">List of values</param>
-    /// <param name="defaultValue">Default value</param>
-    /// <param name="displayItems">Number of items to display</param>
-    /// <param name="onSlide">Use Callback</param>
-    /// <param name="defaultDisabled">Make it disabled by default</param>
-    /// <returns>Menu Option</returns>
-    public ref IMenuOption AddSliderOption(string display, List<object> values, object? defaultValue, int displayItems, Action<IPlayer, IMenuOption, IMenu, int, object>? onSlide, bool defaultDisabled = false);
+    event Action<IPlayer>? OnOpen;
+    event Action<IPlayer>? OnClose;
+    event Action<IPlayer>? OnMove;
+    event Action<IPlayer, IOption>? OnItemSelected;
+    event Action<IPlayer, IOption>? OnItemHovered;
+    event Action<IPlayer>? BeforeRender;
+    event Action<IPlayer>? AfterRender;
 
-    /// <summary>
-    /// Changes the current position by a certain count.
-    /// </summary>
-    /// <param name="count">The amount of advancements to make in front or in back</param>
-    public void ChangePosition(int count);
+    public void Show(IPlayer player);
+    public void Close(IPlayer player);
+    public void MoveSelection(IPlayer player, int offset);
+    public void UseSelection(IPlayer player);
+    public void UseSlideOption(IPlayer player, bool isRight);
+    public void Rerender(IPlayer player);
+    public bool IsCurrentOptionSelectable(IPlayer player);
+    public void SetFreezeState(IPlayer player, bool freeze);
 }
