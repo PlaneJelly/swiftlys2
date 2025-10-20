@@ -269,8 +269,6 @@ bool ClientConnectHook(void* _this, CPlayerSlot slot, const char* pszName, uint6
     player->Initialize(playerid);
     player->SetUnauthorizedSteamID(xuid);
 
-    printf("%s -> %d\n", pszName, playerid);
-
     if (g_pOnClientConnectCallback)
         if (reinterpret_cast<bool(*)(int)>(g_pOnClientConnectCallback)(playerid) == false)
             return false;
