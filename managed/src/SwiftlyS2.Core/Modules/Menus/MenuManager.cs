@@ -40,7 +40,7 @@ internal class MenuManager : IMenuManager
         { "f", KeyKind.F },
     };
 
-    private ConcurrentDictionary<IPlayer, IMenu> OpenMenus { get; set; } = new();
+    private static ConcurrentDictionary<IPlayer, IMenu> OpenMenus { get; set; } = new();
     private ISwiftlyCore _Core { get; set; }
 
     private SoundEvent _useSound = new();
@@ -244,5 +244,10 @@ internal class MenuManager : IMenuManager
         OpenMenus[player] = menu;
         menu.Show(player);
         OnMenuOpened?.Invoke(player, menu);
+    }
+
+    public bool HasMenuOpen(IPlayer player)
+    {
+        return NativePlayer.HasMenuShown(player.PlayerID);
     }
 }
