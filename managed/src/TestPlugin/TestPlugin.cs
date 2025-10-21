@@ -108,6 +108,11 @@ public class TestPlugin : BasePlugin
       @event.AddItem("soundevents/mvp_anthem.vsndevts");
     };
 
+    Core.Event.OnConVarValueChanged += (@event) =>
+    {
+      Console.WriteLine($"ConVar {@event.ConVarName} changed from {@event.OldValue} to {@event.NewValue} by player {@event.PlayerId}");
+    };
+
 
     // var provider = services.BuildServiceProvider();
 
