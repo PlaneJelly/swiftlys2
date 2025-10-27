@@ -86,6 +86,12 @@ public class TestPlugin : BasePlugin
 
   public override void Load(bool hotReload)
   {
+    // Core.Command.HookClientCommand((playerId, commandLine) =>
+    // {
+    //   Console.WriteLine("TestPlugin HookClientCommand " + playerId + " " + commandLine);
+    //   return HookResult.Continue;
+    // });
+    
     // Core.Event.OnConsoleOutput += (@event) =>
     // {
     //   Console.WriteLine($"[TestPlugin] ConsoleOutput: {@event.Message}");
@@ -389,11 +395,6 @@ public class TestPlugin : BasePlugin
   [Command("h2")]
   public void TestCommand3(ICommandContext context)
   {
-    Core.Command.HookClientCommand((playerId, commandLine) =>
-    {
-      Console.WriteLine("TestPlugin HookClientCommand " + playerId + " " + commandLine);
-      return HookResult.Continue;
-    });
     Console.WriteLine(Core.GameData.GetSignature("CBaseEntity::DispatchSpawn"));
     var ent = Core.EntitySystem.CreateEntity<CPointWorldText>();
     ent.DispatchSpawn();
