@@ -25,6 +25,7 @@
 
 #include <public/filesystem.h>
 #include <public/steam/isteamgameserver.h>
+#include <public/tier0/platform.h>
 #include <igamesystemfactory.h>
 
 #include <core/bridge/metamod.h>
@@ -107,6 +108,22 @@ void* Bridge_EngineHelpers_GetTraceManager()
     return g_pTraceManager;
 }
 
+int Bridge_EngineHelpers_GetCSGODirectoryPath(char* out)
+{
+    static std::string s;
+    s = fmt::format("{}{}csgo", Plat_GetGameDirectory(), WIN_LINUX("\\", "/"));
+    if (out != nullptr) strcpy(out, s.c_str());
+    return s.size();
+}
+
+int Bridge_EngineHelpers_GetGameDirectoryPath(char* out)
+{
+    static std::string s;
+    s = Plat_GetGameDirectory();
+    if (out != nullptr) strcpy(out, s.c_str());
+    return s.size();
+}
+
 int Bridge_EngineHelpers_GetCurrentGame(char* out)
 {
     static std::string s;
@@ -175,3 +192,5 @@ DEFINE_NATIVE("EngineHelpers.GetCurrentGame", Bridge_EngineHelpers_GetCurrentGam
 DEFINE_NATIVE("EngineHelpers.GetNativeVersion", Bridge_EngineHelpers_GetNativeVersion);
 DEFINE_NATIVE("EngineHelpers.GetMenuSettings", Bridge_EngineHelpers_GetMenuSettings);
 DEFINE_NATIVE("EngineHelpers.GetGlobalVars", Bridge_EngineHelpers_GetGlobalVars);
+DEFINE_NATIVE("EngineHelpers.GetCSGODirectoryPath", Bridge_EngineHelpers_GetCSGODirectoryPath);
+DEFINE_NATIVE("EngineHelpers.GetGameDirectoryPath", Bridge_EngineHelpers_GetGameDirectoryPath);

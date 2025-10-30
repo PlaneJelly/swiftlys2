@@ -148,6 +148,16 @@ public interface ISwiftlyCore
   public string PluginPath { get; }
 
   /// <summary>
+  /// Gets the absolute file path to the `game/csgo` directory.
+  /// </summary>
+  public string CSGODirectory { get; }
+
+  /// <summary>
+  /// Gets the absolute file path to the game's root directory.
+  /// </summary>
+  public string GameDirectory { get; }
+
+  /// <summary>
   /// Menu manager.
   /// </summary>
   public IMenuManager Menus { get; }
