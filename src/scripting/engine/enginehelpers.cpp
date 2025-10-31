@@ -154,6 +154,7 @@ int Bridge_EngineHelpers_GetMenuSettings(char* out)
                 std::get<std::string>(configuration->GetValue("core.Menu.InputMode")),
                 std::get<std::string>(configuration->GetValue("core.Menu.Buttons.Use")),
                 std::get<std::string>(configuration->GetValue("core.Menu.Buttons.Scroll")),
+                std::get<std::string>(configuration->GetValue("core.Menu.Buttons.ScrollBack")),
                 std::get<std::string>(configuration->GetValue("core.Menu.Buttons.Exit")),
                 std::get<std::string>(configuration->GetValue("core.Menu.Sound.Use.Name")),
                 std::to_string(std::get<double>(configuration->GetValue("core.Menu.Sound.Use.Volume"))),
