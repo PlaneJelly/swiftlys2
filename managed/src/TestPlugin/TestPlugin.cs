@@ -433,6 +433,12 @@ public class TestPlugin : BasePlugin
   [Command("tt3")]
   public void TestCommand33(ICommandContext context)
   {
+    var ent = Core.EntitySystem.CreateEntity<CPhysicsPropOverride>();
+    using CEntityKeyValues kv = new();
+    kv.Set<uint>("m_spawnflags", 256);
+    ent.DispatchSpawn(kv);
+    ent.SetModel("weapons/models/grenade/incendiary/weapon_incendiarygrenade.vmdl");
+    ent.Teleport(new Vector(context.Sender!.PlayerPawn!.AbsOrigin!.Value.X + 50, context.Sender!.PlayerPawn!.AbsOrigin!.Value.Y + 50, context.Sender!.PlayerPawn!.AbsOrigin!.Value.Z + 30), QAngle.Zero, Vector.Zero);
   }
 
   [Command("tt4")]
