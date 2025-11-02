@@ -45,4 +45,10 @@ internal sealed class MenuDesign : IMenuDesign
         _menu.RenderColor = color;
         return this;
     }
+
+    public IMenuDesign SetVerticalScrollStyle(MenuVerticalScrollStyle style)
+    {
+        _menu.VerticalScrollStyle = style;
+        return this;
+    }
 }

@@ -48,4 +48,11 @@ public interface IMenuDesign
     /// <param name="color">The color to use for menu rendering.</param>
     /// <returns>The current menu design instance for method chaining.</returns>
     IMenuDesign SetColor(Color color);
+
+    /// <summary>
+    /// Sets the vertical scroll style for the menu navigation.
+    /// </summary>
+    /// <param name="style">The vertical scroll style to use.</param>
+    /// <returns>The current menu design instance for method chaining.</returns>
+    IMenuDesign SetVerticalScrollStyle(MenuVerticalScrollStyle style);
 }

@@ -329,13 +329,6 @@ public interface IMenuBuilder
     /// <returns>The current menu builder instance for method chaining.</returns>
     [Obsolete("Use Design.SetColor instead")]
     IMenuBuilder SetColor(Color color);
-
-    /// <summary>
-    /// Sets the scroll style for the menu navigation.
-    /// </summary>
-    /// <param name="style">The scroll style to use.</param>
-    /// <returns>The current menu builder instance for method chaining.</returns>
-    IMenuBuilder SetScrollStyle(MenuScrollStyle style);
 }
 
 /// <summary>

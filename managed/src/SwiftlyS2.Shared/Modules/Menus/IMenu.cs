@@ -200,32 +200,32 @@ public interface IMenu
     public void SetFreezeState(IPlayer player, bool freeze);
 
     /// <summary>
-    /// Gets or sets the scroll style for the menu navigation.
+    /// Gets or sets the vertical scroll style for the menu navigation.
     /// Determines how the selection arrow moves when navigating through options.
     /// </summary>
-    public MenuScrollStyle ScrollStyle { get; set; }
+    public MenuVerticalScrollStyle VerticalScrollStyle { get; set; }
 }
 
 /// <summary>
-/// Defines the scroll behavior style for menu navigation.
+/// Defines the vertical scroll behavior style for menu navigation.
 /// </summary>
-public enum MenuScrollStyle
+public enum MenuVerticalScrollStyle
 {
     /// <summary>
-    /// Linear scrolling mode where the selection indicator moves within the visible area.
+    /// Linear vertical scrolling mode where the selection indicator moves within the visible area.
     /// Content displays linearly without wrapping, indicator adjusts position as selection changes.
     /// </summary>
     LinearScroll,
 
     /// <summary>
     /// Attempts to always keep the selection indicator at the preset center position.
-    /// Content scrolls circularly around the center, allowing wrap-around display (e.g., 7 8 1 2 3).
+    /// Content scrolls vertically in a circular manner around the center, allowing wrap-around display (e.g., 7 8 1 2 3).
     /// </summary>
     CenterFixed,
 
     /// <summary>
     /// Waits for the selection indicator to reach the preset center, then maintains it there.
-    /// Indicator adjusts position at the edges but stays centered during mid-range navigation.
+    /// Indicator adjusts position at the edges but stays centered during mid-range vertical navigation.
     /// </summary>
     WaitingCenter
 }

@@ -566,11 +566,11 @@ public class TestPlugin : BasePlugin
 
     if (!int.TryParse(context.Args[0], out int type)) type = 0;
 
-    settingsMenu.Builder.SetScrollStyle(type switch
+    settingsMenu.Builder.Design.SetVerticalScrollStyle(type switch
     {
-      1 => MenuScrollStyle.LinearScroll,
-      2 => MenuScrollStyle.WaitingCenter,
-      _ => MenuScrollStyle.CenterFixed
+      1 => MenuVerticalScrollStyle.LinearScroll,
+      2 => MenuVerticalScrollStyle.WaitingCenter,
+      _ => MenuVerticalScrollStyle.CenterFixed
     });
     
     settingsMenu.Builder.AddButton("1. AButton",(p) =>
