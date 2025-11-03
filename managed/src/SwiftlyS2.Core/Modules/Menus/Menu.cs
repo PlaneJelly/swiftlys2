@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Text;
+using System.Text.RegularExpressions;
 using SwiftlyS2.Core.Menu.Options;
 using SwiftlyS2.Core.Natives;
 using SwiftlyS2.Shared;
@@ -10,7 +11,7 @@ using SwiftlyS2.Shared.SchemaDefinitions;
 
 namespace SwiftlyS2.Core.Menus;
 
-internal class Menu : IMenu
+internal partial class Menu : IMenu
 {
     public string Title { get; set; } = "";
 
@@ -424,7 +425,8 @@ internal class Menu : IMenu
             return text;
         }
 
-        if (Helper.EstimateTextWidth(text) <= activeStyle.Value.MaxWidth)
+        var plainText = StripHtmlTags(text);
+        if (Helper.EstimateTextWidth(plainText) <= activeStyle.Value.MaxWidth)
         {
             return text;
         }
@@ -441,8 +443,24 @@ internal class Menu : IMenu
         };
     }
 
-    private static int CalculateVisibleChars(string text, float maxWidth) =>
-        text.TakeWhile((c, i) => text[..i].Sum(Helper.GetCharWidth) + Helper.GetCharWidth(c) <= maxWidth).Count();
+    [GeneratedRegex("<.*?>")]
+    private static partial Regex HtmlTagRegex();
+
+    private static string StripHtmlTags(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return text;
+        }
+
+        return HtmlTagRegex().Replace(text, string.Empty);
+    }
+
+    private static int CalculateVisibleChars(string text, float maxWidth)
+    {
+        var plainText = StripHtmlTags(text);
+        return plainText.TakeWhile((c, i) => plainText[..i].Sum(Helper.GetCharWidth) + Helper.GetCharWidth(c) <= maxWidth).Count();
+    }
 
     private int UpdateScrollOffset(string text, bool scrollLeft)
     {

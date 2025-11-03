@@ -608,9 +608,14 @@ public class TestPlugin : BasePlugin
     settingsMenu.Builder.AddText("7. Text");
     settingsMenu.Builder.AddText("8. Text");
     settingsMenu.Builder.AddText("9. Text");
+    // TODO: Fix ApplyHorizontalStyle - HTML tags get truncated incorrectly
+    // Input: <font color='red'><b><garbage>abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</garbage></b></font>
+    // With ScrollLeftFade(26f) outputs: <font color='red'><b><garb
+    // Expected: Should preserve complete HTML tag structure
+    settingsMenu.Builder.AddText("<font color='red'><b><garbage>abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</garbage></b></font>", overflowStyle: MenuHorizontalStyle.ScrollLeftFade(26f));
     settingsMenu.Builder.AddText("123456789012345678901234567890");
     settingsMenu.Builder.AddText("一二三四五六七八九十一二三四五六七八九十");
-    settingsMenu.Builder.AddText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    // settingsMenu.Builder.AddText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     settingsMenu.Builder.AddText("Swiftlys2 向这广袤世界致以温柔问候", overflowStyle: MenuHorizontalStyle.ScrollRightLoop(26f, 8));
     settingsMenu.Builder.AddText("Swiftlys2 からこの広大なる世界へ温かい挨拶を");
     settingsMenu.Builder.AddText("Swiftlys2 가 이 넓은 세상에 따뜻한 인사를 전합니다");
