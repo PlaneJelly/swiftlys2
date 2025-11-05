@@ -1,24 +1,25 @@
 namespace SwiftlyS2.Shared.SchemaDefinitions;
 
-public partial interface CPlayer_WeaponServices {
+public partial interface CPlayer_WeaponServices
+{
 
   /// <summary>
   /// Drop a weapon.
   /// </summary>
   /// <param name="weapon">The weapon to drop.</param>
-  public void DropWeapon(CBasePlayerWeapon weapon);
+  public void DropWeapon( CBasePlayerWeapon weapon );
 
   /// <summary>
   /// Drop and remove a weapon.
   /// </summary>
   /// <param name="weapon">The weapon to remove.</param>
-  public void RemoveWeapon(CBasePlayerWeapon weapon);
+  public void RemoveWeapon( CBasePlayerWeapon weapon );
 
   /// <summary>
   /// Make player select a weapon.
   /// </summary>
   /// <param name="weapon">The weapon to select.</param>
-  public void SelectWeapon(CBasePlayerWeapon weapon);
+  public void SelectWeapon( CBasePlayerWeapon weapon );
 
   /// <summary>
   /// Drop a weapon by slot.
