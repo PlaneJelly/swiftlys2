@@ -321,7 +321,7 @@ internal partial class Menu : IMenu
                     asyncButton.SetLoadingText("Processing...");
                     Rerender(player, true);
                     var closeAfter = asyncButton.CloseOnSelect;
-                    Task.Run(async () =>
+                    _ = Task.Run(async () =>
                     {
                         try
                         {
@@ -355,12 +355,17 @@ internal partial class Menu : IMenu
                 }
 
             case SubmenuMenuOption submenu:
-                var subMenu = submenu.GetSubmenu();
-                if (subMenu != null)
+                _ = Task.Run(async () =>
                 {
-                    subMenu.Parent = this;
-                    MenuManager.OpenMenu(player, subMenu);
-                }
+                    var subMenu = await submenu.GetSubmenuAsync();
+                    if (subMenu != null && player.IsValid && MenuManager.GetMenu(player) == this)
+                    {
+                        subMenu.Parent = this;
+                        MenuManager.OpenMenu(player, subMenu);
+                    }
+                });
+                break;
+            default:
                 break;
         }
     }

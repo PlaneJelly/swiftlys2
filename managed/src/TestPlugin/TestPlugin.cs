@@ -568,6 +568,31 @@ public class TestPlugin : BasePlugin
       Core.Menus.OpenMenu(player, settingsMenu);
   }
 
+  [Command("i77")]
+  public void TestIssue77Command(ICommandContext context)
+  {
+      var player = context.Sender!;
+      IMenu settingsMenu = Core.Menus.CreateMenu("Settings");
+
+      settingsMenu.Builder.AddText("123");
+      settingsMenu.Builder.AddSubmenu("Submenu", () =>
+      {
+        var menu = Core.Menus.CreateMenu("Submenu");
+        menu.Builder.AddText("1234");
+        return menu;
+      });
+
+      settingsMenu.Builder.AddSubmenu("Async Submenu", async () =>
+      {
+        await Task.Delay(5000);
+        var menu = Core.Menus.CreateMenu("Async Submenu");
+        menu.Builder.AddText("12345");
+        return menu;
+      });
+
+      Core.Menus.OpenMenu(player, settingsMenu);
+  }
+
   [Command("i78")]
   public void TestIssue78Command(ICommandContext context)
   {
