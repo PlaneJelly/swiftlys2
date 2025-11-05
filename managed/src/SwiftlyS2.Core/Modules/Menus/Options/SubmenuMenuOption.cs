@@ -9,6 +9,7 @@ internal class SubmenuMenuOption : IOption
     public string Text { get; set; }
     public IMenu? Submenu { get; set; }
     public Func<IMenu>? SubmenuBuilder { get; set; }
+    public Func<Task<IMenu>>? AsyncSubmenuBuilder { get; set; }
     public Func<IPlayer, bool>? VisibilityCheck { get; set; }
     public Func<IPlayer, bool>? EnabledCheck { get; set; }
     public IMenuTextSize Size { get; set; }
@@ -18,31 +19,38 @@ internal class SubmenuMenuOption : IOption
     public bool Visible => true;
     public bool Enabled => true;
 
-    public SubmenuMenuOption(string text, IMenu? submenu = null, IMenuTextSize size = IMenuTextSize.Medium)
+    public SubmenuMenuOption( string text, IMenu? submenu = null, IMenuTextSize size = IMenuTextSize.Medium )
     {
         Text = text;
         Submenu = submenu;
         Size = size;
     }
 
-    public SubmenuMenuOption(string text, Func<IMenu> submenuBuilder, IMenuTextSize size = IMenuTextSize.Medium)
+    public SubmenuMenuOption( string text, Func<IMenu> submenuBuilder, IMenuTextSize size = IMenuTextSize.Medium )
     {
         Text = text;
         SubmenuBuilder = submenuBuilder;
         Size = size;
     }
 
-    public bool ShouldShow(IPlayer player)
+    public SubmenuMenuOption( string text, Func<Task<IMenu>> asyncSubmenuBuilder, IMenuTextSize size = IMenuTextSize.Medium )
+    {
+        Text = text;
+        AsyncSubmenuBuilder = asyncSubmenuBuilder;
+        Size = size;
+    }
+
+    public bool ShouldShow( IPlayer player )
     {
         return VisibilityCheck?.Invoke(player) ?? true;
     }
 
-    public bool CanInteract(IPlayer player)
+    public bool CanInteract( IPlayer player )
     {
         return EnabledCheck?.Invoke(player) ?? true;
     }
 
-    public string GetDisplayText(IPlayer player, bool updateHorizontalStyle = false)
+    public string GetDisplayText( IPlayer player, bool updateHorizontalStyle = false )
     {
         var sizeClass = MenuSizeHelper.GetSizeClass(Size);
 
@@ -64,5 +72,25 @@ internal class SubmenuMenuOption : IOption
     public IMenu? GetSubmenu()
     {
         return Submenu ?? SubmenuBuilder?.Invoke();
+    }
+
+    public async Task<IMenu?> GetSubmenuAsync()
+    {
+        if (Submenu != null)
+        {
+            return Submenu;
+        }
+
+        if (AsyncSubmenuBuilder != null)
+        {
+            return await AsyncSubmenuBuilder.Invoke();
+        }
+
+        if (SubmenuBuilder != null)
+        {
+            return SubmenuBuilder.Invoke();
+        }
+
+        return null;
     }
 }
