@@ -107,7 +107,7 @@ internal class MenuManager : IMenuManager
 
             new Dictionary<string, KeyKind> { { "Scroll", scrollKey }, { "ScrollBack", scrollBackKey }, { "Exit", exitKey }, { "Use", useKey } }
                 .GroupBy(kvp => kvp.Value)
-                .Where(g => g.Count() > 1)
+                .Where(g => g.Count() > 1 && @event.Key.HasFlag(g.Key))
                 .ToList()
                 .ForEach(group =>
                 {
