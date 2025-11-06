@@ -334,6 +334,102 @@ jobs:
         tag_name: ${{ env.TAG_NAME }}
         name: Release v${{ needs.versioning.outputs.semVer }}
         body: ${{ needs.versioning.outputs.semVer  }}
+
+    - name: Get commit summary for beta
+      if: github.ref == 'refs/heads/beta'
+      id: beta_commits
+      run: |
+        COMMITS=$(git log -5 --pretty=format:"• %s (%h)" | head -c 1000)
+        echo "summary<<EOF" >> $GITHUB_OUTPUT
+        echo "$COMMITS" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Send Discord notification (Beta)
+      if: github.ref == 'refs/heads/beta'
+      run: |
+        curl -H "Content-Type: application/json" \
+          -d '{
+            "embeds": [{
+              "title": "🚀 New Beta Release",
+              "description": "**SwiftlyS2** v${{ needs.versioning.outputs.semVer }} has been released!",
+              "color": 65261,
+              "fields": [
+                {
+                  "name": "📦 Version",
+                  "value": "`${{ needs.versioning.outputs.semVer }}`",
+                  "inline": true
+                },
+                {
+                  "name": "🔖 Tag",
+                  "value": "`${{ env.TAG_NAME }}`",
+                  "inline": true
+                },
+                {
+                  "name": "📝 Recent Commits",
+                  "value": "${{ steps.beta_commits.outputs.summary }}",
+                  "inline": false
+                },
+                {
+                  "name": "📥 Download",
+                  "value": "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ env.TAG_NAME }})",
+                  "inline": false
+                }
+              ],
+              "timestamp": "${{ github.event.head_commit.timestamp }}",
+              "footer": {
+                "text": "Beta Release • SwiftlyS2"
+              }
+            }]
+          }' \
+          ${{ secrets.DISCORD_WEBHOOK_BETA }}
+
+    - name: Get commit summary for master
+      if: github.ref == 'refs/heads/master'
+      id: master_commits
+      run: |
+        COMMITS=$(git log -10 --pretty=format:"• %s (%h)" | head -c 1000)
+        echo "summary<<EOF" >> $GITHUB_OUTPUT
+        echo "$COMMITS" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Send Discord notification (Master)
+      if: github.ref == 'refs/heads/master'
+      run: |
+        curl -H "Content-Type: application/json" \
+          -d '{
+            "embeds": [{
+              "title": "✨ New Stable Release",
+              "description": "**SwiftlyS2** v${{ needs.versioning.outputs.semVer }} is now available!",
+              "color": 65261,
+              "fields": [
+                {
+                  "name": "📦 Version",
+                  "value": "`${{ needs.versioning.outputs.semVer }}`",
+                  "inline": true
+                },
+                {
+                  "name": "🔖 Tag",
+                  "value": "`${{ env.TAG_NAME }}`",
+                  "inline": true
+                },
+                {
+                  "name": "📝 Changelog Summary",
+                  "value": "${{ steps.master_commits.outputs.summary }}",
+                  "inline": false
+                },
+                {
+                  "name": "📥 Download",
+                  "value": "[View Release](https://github.com/${{ github.repository }}/releases/tag/${{ env.TAG_NAME }})",
+                  "inline": false
+                }
+              ],
+              "timestamp": "${{ github.event.head_commit.timestamp }}",
+              "footer": {
+                "text": "Stable Release • SwiftlyS2"
+              }
+            }]
+          }' \
+          ${{ secrets.DISCORD_WEBHOOK_MASTER }}
   nuget:
     if: ${{ github.event_name == 'push' && github.repository_owner == 'swiftly-solution' }}
     needs: [versioning, releasing]
