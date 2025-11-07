@@ -71,6 +71,11 @@ public interface IMenuAPI
     public MenuConfiguration Configuration { get; }
 
     /// <summary>
+    /// Keybind overrides for this menu.
+    /// </summary>
+    public IMenuKeybindOverrides KeybindOverrides { get; }
+
+    /// <summary>
     /// The parent menu in a hierarchical menu structure, or null if this is a top-level menu.
     /// </summary>
     public IMenuAPI? Parent { get; }

@@ -122,7 +122,7 @@ public interface IMenuManagerAPI
     /// </summary>
     /// <param name="player">The player to check.</param>
     /// <returns>The player's active menu, or null if they have no menu open.</returns>
-    public IMenuAPI? GetMenu( IPlayer player );
+    public IMenuAPI? GetCurrentMenu( IPlayer player );
 
     /// <summary>
     /// Opens the specified menu for the specified player.
