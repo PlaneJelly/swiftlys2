@@ -75,6 +75,7 @@ bool SwiftlyCore::Load(BridgeKind_t kind)
 
     s2binlib_initialize(Plat_GetGameDirectory(), "csgo");
 
+#ifdef _WIN32
     void* libServer = load_library(
             (const char_t*)WIN_LINUX(
                 StringWide((Plat_GetGameDirectory() + std::string("\\csgo\\bin\\win64\\server.dll"))).c_str(),
@@ -91,6 +92,7 @@ bool SwiftlyCore::Load(BridgeKind_t kind)
 
     s2binlib_set_module_base_from_pointer("server", libServer);
     s2binlib_set_module_base_from_pointer("engine2", libEngine);
+#endif
 
     auto cvars = g_ifaceService.FetchInterface<ICvar>(CVAR_INTERFACE_VERSION);
     g_pCVar = cvars;
