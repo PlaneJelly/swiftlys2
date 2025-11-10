@@ -99,6 +99,33 @@ public sealed class MenuOptionClickEventArgs : EventArgs
 }
 
 /// <summary>
+/// Event arguments for when a menu option's value changes.
+/// </summary>
+/// <typeparam name="T">The type of the value.</typeparam>
+public sealed class MenuOptionValueChangedEventArgs<T> : EventArgs
+{
+    /// <summary>
+    /// Gets the player who triggered the value change.
+    /// </summary>
+    public required IPlayer Player { get; init; }
+
+    /// <summary>
+    /// Gets the menu option whose value changed.
+    /// </summary>
+    public required IMenuOption Option { get; init; }
+
+    /// <summary>
+    /// Gets the previous value before the change.
+    /// </summary>
+    public required T OldValue { get; init; }
+
+    /// <summary>
+    /// Gets the new value after the change.
+    /// </summary>
+    public required T NewValue { get; init; }
+}
+
+/// <summary>
 /// Represents a menu option that can be displayed and interacted with by players.
 /// </summary>
 public interface IMenuOption : IDisposable

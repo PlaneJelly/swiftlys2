@@ -134,7 +134,7 @@ public interface IMenuManagerAPI
     public IMenuAPI? GetCurrentMenu( IPlayer player );
 
     /// <summary>
-    /// Opens the specified menu for the specified player.
+    /// Opens the specified menu for all players.
     /// </summary>
     /// <param name="menu">The menu to display.</param>
     public void OpenMenu( IMenuAPI menu );
