@@ -21,8 +21,39 @@ public abstract partial class MenuOptionBase : IMenuOption, IDisposable
 
     private volatile bool disposed;
 
+    /// <summary>
+    /// Creates an instance of <see cref="MenuOptionBase"/>.
+    /// </summary>
+    /// <remarks>
+    /// Using the parameterless constructor will not enable dynamic text updating features.
+    /// Derived classes should override the <see cref="GetDisplayText"/> method to implement custom text style changes.
+    /// </remarks>
     protected MenuOptionBase()
     {
+    }
+
+    /// <summary>
+    /// Creates an instance of <see cref="MenuOptionBase"/> with dynamic text updating capabilities.
+    /// </summary>
+    /// <param name="updateIntervalMs">The interval in milliseconds between text updates.</param>
+    /// <param name="pauseIntervalMs">The pause duration in milliseconds before starting the next text update cycle.</param>
+    /// <remarks>
+    /// Values less than 1/64f*1000 milliseconds (approximately 15.6ms) are meaningless,
+    /// as the refresh rate would be higher than the game's frame interval.
+    /// Both parameters will be automatically clamped to this minimum value.
+    /// </remarks>
+    protected MenuOptionBase( int updateIntervalMs, int pauseIntervalMs )
+    {
+        if (updateIntervalMs < (int)(1 / 64f * 1000))
+        {
+            Spectre.Console.AnsiConsole.WriteException(new ArgumentOutOfRangeException(nameof(updateIntervalMs), $"updateIntervalMs: value {updateIntervalMs} is out of range."));
+        }
+
+        if (pauseIntervalMs < (int)(1 / 64f * 1000))
+        {
+            Spectre.Console.AnsiConsole.WriteException(new ArgumentOutOfRangeException(nameof(pauseIntervalMs), $"pauseIntervalMs: value {pauseIntervalMs} is out of range."));
+        }
+
         textStyleProcessor = new();
         dynamicTextUpdater = new DynamicTextUpdater(
             processor: textStyleProcessor,
@@ -30,8 +61,8 @@ public abstract partial class MenuOptionBase : IMenuOption, IDisposable
             getTextStyle: () => textStyle,
             getMaxWidth: () => maxWidth,
             setDynamicText: value => dynamicText = value,
-            updateIntervalMs: 120,
-            pauseIntervalMs: 1000
+            updateIntervalMs: Math.Max((int)(1 / 64f * 1000), updateIntervalMs),
+            pauseIntervalMs: Math.Max((int)(1 / 64f * 1000), pauseIntervalMs)
         );
     }
 
@@ -307,7 +338,7 @@ public abstract partial class MenuOptionBase : IMenuOption, IDisposable
 
         BeforeFormat?.Invoke(this, args);
 
-        var displayText = args.CustomText ?? dynamicText;
+        var displayText = args.CustomText ?? (string.IsNullOrWhiteSpace(dynamicText) ? Text : dynamicText);
 
         if (displayLine > 0)
         {
@@ -319,7 +350,7 @@ public abstract partial class MenuOptionBase : IMenuOption, IDisposable
         }
 
         var isEnabled = GetEnabled(player);
-        var sizeClass = GetSizeClass(TextSize);
+        var sizeClass = TextSize.ToCssClass();
 
         var colorStyle = isEnabled ? string.Empty : " color='grey'";
         var result = $"<font class='{sizeClass}'{colorStyle}>{displayText}</font>";
@@ -419,20 +450,6 @@ public abstract partial class MenuOptionBase : IMenuOption, IDisposable
     // {
     //     Hover?.Invoke(this, new MenuOptionEventArgs { Player = player, Option = this });
     // }
-
-    protected static string GetSizeClass( MenuOptionTextSize size )
-    {
-        return size switch {
-            MenuOptionTextSize.ExtraSmall => "fontSize-xs",
-            MenuOptionTextSize.Small => "fontSize-s",
-            MenuOptionTextSize.SmallMedium => "fontSize-sm",
-            MenuOptionTextSize.Medium => "fontSize-m",
-            MenuOptionTextSize.MediumLarge => "fontSize-ml",
-            MenuOptionTextSize.Large => "fontSize-l",
-            MenuOptionTextSize.ExtraLarge => "fontSize-xl",
-            _ => "fontSize-m"
-        };
-    }
 
     [GeneratedRegex(@"<[/\\]*br[/\\]*>", RegexOptions.IgnoreCase)]
     private static partial Regex BrTagRegex();

@@ -25,8 +25,17 @@ public enum KeyKind : int
     F,
 }
 
+/// <summary>
+/// Provides extension methods for <see cref="KeyKind"/>.
+/// </summary>
 internal static class KeyKindExtensions
 {
+    /// <summary>
+    /// Converts a <see cref="KeyKind"/> enum value to its corresponding <see cref="KeyBind"/> enum value.
+    /// </summary>
+    /// <param name="keyKind">The <see cref="KeyKind"/> value to convert.</param>
+    /// <returns>The corresponding <see cref="KeyBind"/> enum value.</returns>
+    /// <exception cref="ArgumentException">Thrown when the <paramref name="keyKind"/> is not recognized.</exception>
     public static KeyBind ToKeyBind( this KeyKind keyKind )
     {
         return keyKind switch {

@@ -323,6 +323,32 @@ public enum MenuOptionTextSize
 }
 
 /// <summary>
+/// Provides extension methods for <see cref="MenuOptionTextSize"/>.
+/// </summary>
+internal static class MenuOptionTextSizeExtensions
+{
+    /// <summary>
+    /// Converts a <see cref="MenuOptionTextSize"/> value to its corresponding CSS class name.
+    /// </summary>
+    /// <param name="textSize">The text size to convert.</param>
+    /// <returns>The CSS class name for the specified size.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="textSize"/> is not recognized.</exception>
+    public static string ToCssClass( this MenuOptionTextSize textSize )
+    {
+        return textSize switch {
+            MenuOptionTextSize.ExtraSmall => "fontSize-xs",
+            MenuOptionTextSize.Small => "fontSize-s",
+            MenuOptionTextSize.SmallMedium => "fontSize-sm",
+            MenuOptionTextSize.Medium => "fontSize-m",
+            MenuOptionTextSize.MediumLarge => "fontSize-ml",
+            MenuOptionTextSize.Large => "fontSize-l",
+            MenuOptionTextSize.ExtraLarge => "fontSize-xl",
+            _ => throw new ArgumentException($"Unknown text size: {textSize}.")
+        };
+    }
+}
+
+/// <summary>
 /// Defines the horizontal text overflow behavior for menu options.
 /// </summary>
 public enum MenuOptionTextStyle
