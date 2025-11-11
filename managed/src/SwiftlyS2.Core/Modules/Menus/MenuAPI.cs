@@ -387,7 +387,7 @@ internal sealed class MenuAPI : IMenuAPI, IDisposable
         }
     }
 
-    public void CloseForPlayer( IPlayer player )
+    public void HideForPlayer( IPlayer player )
     {
         var removedFromSelected = selectedOptionIndex.TryRemove(player, out _);
         var removedFromDesired = desiredOptionIndex.TryRemove(player, out _);

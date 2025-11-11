@@ -323,7 +323,7 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
     {
         if (openMenus.TryRemove(player, out _))
         {
-            menu.CloseForPlayer(player);
+            menu.HideForPlayer(player);
             MenuClosed?.Invoke(this, new MenuManagerEventArgs { Player = player, Menu = menu });
 
             if (menu.Parent != null)
@@ -340,7 +340,7 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
             var currentMenu = kvp.Value;
             while (currentMenu != null)
             {
-                currentMenu.CloseForPlayer(kvp.Key);
+                currentMenu.HideForPlayer(kvp.Key);
                 MenuClosed?.Invoke(this, new MenuManagerEventArgs { Player = kvp.Key, Menu = currentMenu });
                 currentMenu = currentMenu.Parent;
             }

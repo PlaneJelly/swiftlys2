@@ -193,16 +193,24 @@ public interface IMenuAPI : IDisposable
     // public event EventHandler<MenuEventArgs>? OptionLeaving;
 
     /// <summary>
-    /// Displays this menu to the specified player.
+    /// Shows this menu to the specified player by displaying its content.
     /// </summary>
     /// <param name="player">The player who will see the menu.</param>
+    /// <remarks>
+    /// This method only displays the menu visually. To properly open a menu (which handles state management, 
+    /// closing other menus, and triggering events), use <see cref="IMenuManagerAPI.OpenMenuForPlayer"/> instead.
+    /// </remarks>
     public void ShowForPlayer( IPlayer player );
 
     /// <summary>
-    /// Closes this menu for the specified player.
+    /// Hides this menu for the specified player by removing its visual display.
     /// </summary>
-    /// <param name="player">The player whose menu will be closed.</param>
-    public void CloseForPlayer( IPlayer player );
+    /// <param name="player">The player whose menu will be hidden.</param>
+    /// <remarks>
+    /// This method only hides the menu visually. To properly close a menu (which handles state cleanup, 
+    /// triggering events, and reopening parent menus), use <see cref="IMenuManagerAPI.CloseMenuForPlayer"/> instead.
+    /// </remarks>
+    public void HideForPlayer( IPlayer player );
 
     /// <summary>
     /// Adds a new option to this menu.
