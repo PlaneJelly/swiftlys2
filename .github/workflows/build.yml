@@ -45,7 +45,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '10.0.x'
     - name: Build managed
       run: |
         cd managed
@@ -231,14 +231,14 @@ jobs:
       run: |
         mkdir -p ./linux-runtimes
         cd ./linux-runtimes
-        wget https://builds.dotnet.microsoft.com/dotnet/Runtime/8.0.20/dotnet-runtime-8.0.20-linux-x64.tar.gz
+        wget https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.0/dotnet-runtime-10.0.0-linux-x64.tar.gz
         mkdir -p content
-        tar -xzf dotnet-runtime-8.0.20-linux-x64.tar.gz -C content
+        tar -xzf dotnet-runtime-10.0.0-linux-x64.tar.gz -C content
         cd ..
         mkdir -p ./windows-runtimes
         cd ./windows-runtimes
-        wget https://builds.dotnet.microsoft.com/dotnet/Runtime/8.0.20/dotnet-runtime-8.0.20-win-x64.zip
-        unzip dotnet-runtime-8.0.20-win-x64.zip -d content
+        wget https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.0/dotnet-runtime-10.0.0-win-x64.zip
+        unzip dotnet-runtime-10.0.0-win-x64.zip -d content
         cd ..
       
     - name: Create package
@@ -262,8 +262,8 @@ jobs:
         cp -r linux-runtimes/content/ ${{ env.LINUX_FOLDER }}-with-runtimes/swiftlys2/bin/managed/dotnet
         cp -r windows-runtimes/content/ ${{ env.WINDOWS_FOLDER }}-with-runtimes/swiftlys2/bin/managed/dotnet
 
-        cp linux-runtimes/content/host/fxr/8.0.20/libhostfxr.so ${{ env.LINUX_FOLDER }}-with-runtimes/swiftlys2/bin/linuxsteamrt64/libhostfxr.so
-        cp windows-runtimes/content/host/fxr/8.0.20/hostfxr.dll ${{ env.WINDOWS_FOLDER }}-with-runtimes/swiftlys2/bin/win64/hostfxr.dll
+        cp linux-runtimes/content/host/fxr/10.0.0/libhostfxr.so ${{ env.LINUX_FOLDER }}-with-runtimes/swiftlys2/bin/linuxsteamrt64/libhostfxr.so
+        cp windows-runtimes/content/host/fxr/10.0.0/hostfxr.dll ${{ env.WINDOWS_FOLDER }}-with-runtimes/swiftlys2/bin/win64/hostfxr.dll
 
         mkdir -p ${{ env.LINUX_FOLDER }}/addons/
         mkdir -p ${{ env.WINDOWS_FOLDER }}/addons/
@@ -432,7 +432,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '10.0.x'
     - name: Publish to nuget
       run: |
         cd managed
