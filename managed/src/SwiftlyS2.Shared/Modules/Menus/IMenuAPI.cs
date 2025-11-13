@@ -170,6 +170,9 @@ public record class MenuConfiguration
 /// Custom key bindings for menu actions.
 /// Each property can be set to override the default bindings, or left null to use defaults.
 /// </summary>
+/// <remarks>
+/// NOTE: For WASD input mode, any key binding overrides will not take effect.
+/// </remarks>
 public readonly record struct MenuKeybindOverrides
 {
     /// <summary>
