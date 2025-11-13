@@ -92,7 +92,7 @@ public sealed class ProgressBarMenuOption : MenuOptionBase
 
         var bar = string.Concat(
             Enumerable.Range(0, filledCount).Select(_ => $"<font color='#FFFFFF'>{filledChar}</font>")
-                .Concat(Enumerable.Range(0, emptyCount).Select(_ => $"<font color='#666666'>{emptyChar}</font>"))
+                .Concat(Enumerable.Range(0, emptyCount).Select(_ => $"<font color='{Menu?.Configuration.DisabledColor ?? "#666666"}'>{emptyChar}</font>"))
         );
 
         var progressBar = $"<font color='#FFFFFF'>(</font>{bar}<font color='#FF3333'>)</font>{(ShowPercentage ? $" <font color='#FFFFFF'>{(int)(progress * 100)}%</font>" : string.Empty)}";

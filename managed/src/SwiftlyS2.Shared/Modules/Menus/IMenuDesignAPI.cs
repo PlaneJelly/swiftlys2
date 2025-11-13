@@ -123,6 +123,27 @@ public interface IMenuDesignAPI
     /// <returns>The menu builder for method chaining.</returns>
     public IMenuBuilderAPI SetVisualGuideLineColor( System.Drawing.Color color );
 
+    /// <summary>
+    /// Sets the color of disabled menu options using hex color format.
+    /// </summary>
+    /// <param name="hexColor">The color in hex format (e.g., "#808080" for gray). Pass null to reset to default.</param>
+    /// <returns>The menu builder for method chaining.</returns>
+    public IMenuBuilderAPI SetDisabledColor( string? hexColor = null );
+
+    /// <summary>
+    /// Sets the color of disabled menu options using SwiftlyS2 native color.
+    /// </summary>
+    /// <param name="color">The SwiftlyS2 native color to apply to disabled options.</param>
+    /// <returns>The menu builder for method chaining.</returns>
+    public IMenuBuilderAPI SetDisabledColor( Natives.Color color );
+
+    /// <summary>
+    /// Sets the color of disabled menu options using System.Drawing color.
+    /// </summary>
+    /// <param name="color">The System.Drawing color to apply to disabled options.</param>
+    /// <returns>The menu builder for method chaining.</returns>
+    public IMenuBuilderAPI SetDisabledColor( System.Drawing.Color color );
+
     // /// <summary>
     // /// Sets the global option text style for the menu.
     // /// </summary>

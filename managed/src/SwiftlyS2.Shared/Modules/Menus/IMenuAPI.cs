@@ -15,6 +15,7 @@ public record class MenuConfiguration
     private string? navigationMarkerColor = null;
     private string? footerColor = null;
     private string? visualGuideLineColor = null;
+    private string? disabledColor = null;
 
     /// <summary>
     /// The title of the menu.
@@ -139,6 +140,27 @@ public record class MenuConfiguration
             else
             {
                 visualGuideLineColor = value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// The color of disabled menu options in hex format.
+    /// </summary>
+    /// <remarks>
+    /// Supports "#RGB", "#RGBA", "#RRGGBB", and "#RRGGBBAA" formats.
+    /// </remarks>
+    public string? DisabledColor {
+        get => disabledColor;
+        set {
+            if (string.IsNullOrWhiteSpace(value) || Helper.ParseHexColor(value) is not (not null, not null, not null, _))
+            {
+                Spectre.Console.AnsiConsole.WriteException(new ArgumentException($"DisabledColor: '{value}' is not a valid hex color format. Expected '#RRGGBB'.", nameof(value)));
+                disabledColor = null;
+            }
+            else
+            {
+                disabledColor = value;
             }
         }
     }

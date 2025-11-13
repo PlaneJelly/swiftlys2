@@ -354,7 +354,7 @@ public abstract partial class MenuOptionBase : IMenuOption, IDisposable
             displayText = ColorTagRegex().Replace(displayText, string.Empty);
         }
 
-        var colorStyle = isEnabled ? string.Empty : " color='#666666'";
+        var colorStyle = isEnabled ? string.Empty : $" color='{Menu?.Configuration.DisabledColor ?? "#666666"}'";
         var result = $"<font class='{sizeClass}'{colorStyle}>{displayText}</font>";
         // Console.WriteLine($"displayText: {displayText}");
 

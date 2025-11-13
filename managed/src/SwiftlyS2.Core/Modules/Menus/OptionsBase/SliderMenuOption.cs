@@ -116,7 +116,7 @@ public sealed class SliderMenuOption : MenuOptionBase
         var filledBars = (int)(percentage * totalBars);
 
         var bars = string.Concat(
-            Enumerable.Range(0, totalBars).Select(i => i < filledBars ? "<font color='#FFFFFF'>■</font>" : "<font color='#666666'>□</font>")
+            Enumerable.Range(0, totalBars).Select(i => i < filledBars ? "<font color='#FFFFFF'>■</font>" : $"<font color='{Menu?.Configuration.DisabledColor ?? "#666666"}'>□</font>")
         );
 
         var slider = $"<font color='#FFFFFF'>(</font>{bars}<font color='#FF3333'>)</font> <font color='#FFFFFF'>{value:F1}</font>";

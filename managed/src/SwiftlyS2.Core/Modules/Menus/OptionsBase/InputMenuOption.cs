@@ -92,7 +92,7 @@ public sealed class InputMenuOption : MenuOptionBase
 
         var text = base.GetDisplayText(player, displayLine);
         var value = values.GetOrAdd(player, defaultValue);
-        var displayValue = string.IsNullOrEmpty(value) ? "<font color='#666666'>(empty)</font>" : $"<font color='#FFFFFF'>{value}</font>";
+        var displayValue = string.IsNullOrEmpty(value) ? $"<font color='{Menu?.Configuration.DisabledColor ?? "#666666"}'>(empty)</font>" : $"<font color='#FFFFFF'>{value}</font>";
         return $"{text}: {displayValue}";
     }
 
