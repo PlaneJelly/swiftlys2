@@ -88,82 +88,70 @@ internal class ConVar<T> : IConVar<T>
   }
   public void ReplicateToClient( int clientId, T value )
   {
+    var val = "";
     if (value is bool boolValue)
     {
-      NativeConvars.SetClientConvarValueBool(clientId, Name, boolValue);
-      return;
+      val = boolValue ? "1" : "0";
     }
     else if (value is short shortValue)
     {
-      NativeConvars.SetClientConvarValueInt16(clientId, Name, shortValue);
-      return;
+      val = shortValue.ToString();
     }
     else if (value is ushort ushortValue)
     {
-      NativeConvars.SetClientConvarValueUInt16(clientId, Name, ushortValue);
-      return;
+      val = ushortValue.ToString();
     }
     else if (value is int intValue)
     {
-      NativeConvars.SetClientConvarValueInt32(clientId, Name, intValue);
-      return;
+      val = intValue.ToString();
     }
     else if (value is uint uintValue)
     {
-      NativeConvars.SetClientConvarValueUInt32(clientId, Name, uintValue);
-      return;
+      val = uintValue.ToString();
     }
     else if (value is float floatValue)
     {
-      NativeConvars.SetClientConvarValueFloat(clientId, Name, floatValue);
-      return;
+      val = floatValue.ToString();
     }
     else if (value is long longValue)
     {
-      NativeConvars.SetClientConvarValueInt64(clientId, Name, longValue);
-      return;
+      val = longValue.ToString();
     }
     else if (value is ulong ulongValue)
     {
-      NativeConvars.SetClientConvarValueUInt64(clientId, Name, ulongValue);
-      return;
+      val = ulongValue.ToString();
     }
     else if (value is double doubleValue)
     {
-      NativeConvars.SetClientConvarValueDouble(clientId, Name, doubleValue);
-      return;
+      val = doubleValue.ToString();
     }
     else if (value is Color colorValue)
     {
-      NativeConvars.SetClientConvarValueColor(clientId, Name, colorValue);
-      return;
+      val = $"{colorValue.R},{colorValue.G},{colorValue.B}";
     }
     else if (value is QAngle qAngleValue)
     {
-      NativeConvars.SetClientConvarValueQAngle(clientId, Name, qAngleValue);
-      return;
+      val = $"{qAngleValue.Pitch},{qAngleValue.Yaw},{qAngleValue.Roll}";
     }
     else if (value is Vector vectorValue)
     {
-      NativeConvars.SetClientConvarValueVector(clientId, Name, vectorValue);
-      return;
+      val = $"{vectorValue.X},{vectorValue.Y},{vectorValue.Z}";
     }
     else if (value is Vector2D vector2DValue)
     {
-      NativeConvars.SetClientConvarValueVector2D(clientId, Name, vector2DValue);
-      return;
+      val = $"{vector2DValue.X},{vector2DValue.Y}";
     }
     else if (value is Vector4D vector4DValue)
     {
-      NativeConvars.SetClientConvarValueVector4D(clientId, Name, vector4DValue);
-      return;
+      val = $"{vector4DValue.X},{vector4DValue.Y},{vector4DValue.Z},{vector4DValue.W}";
     }
     else if (value is string stringValue)
     {
-      NativeConvars.SetClientConvarValueString(clientId, Name, stringValue);
-      return;
+      val = stringValue;
     }
-    throw new ArgumentException($"Invalid type {typeof(T).Name}");
+    else throw new ArgumentException($"Invalid type {typeof(T).Name}");
+
+    NativeConvars.SetClientConvarValueString(clientId, Name, val);
   }
 
   public void QueryClient( int clientId, Action<string> callback )

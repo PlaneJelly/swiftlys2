@@ -54,6 +54,8 @@
 SwiftlyCore g_SwiftlyCore;
 InterfacesManager g_ifaceService;
 
+INetworkMessages* networkMessages = nullptr;
+
 IVFunctionHook* g_pGameServerSteamAPIActivated = nullptr;
 IVFunctionHook* g_pGameServerSteamAPIDeactivated = nullptr;
 
@@ -97,6 +99,8 @@ bool SwiftlyCore::Load(BridgeKind_t kind)
     auto cvars = g_ifaceService.FetchInterface<ICvar>(CVAR_INTERFACE_VERSION);
     g_pCVar = cvars;
     ConVar_Register(FCVAR_RELEASE | FCVAR_SERVER_CAN_EXECUTE | FCVAR_CLIENT_CAN_EXECUTE | FCVAR_GAMEDLL, nullptr, nullptr);
+
+    networkMessages = g_ifaceService.FetchInterface<INetworkMessages>(NETWORKMESSAGES_INTERFACE_VERSION);
 
     auto logger = g_ifaceService.FetchInterface<ILogger>(LOGGER_INTERFACE_VERSION);
 

@@ -10,15 +10,29 @@ SwiftlyS2 is a powerful scripting framework for Source 2 games, built in C++ wit
 > [!warning]
 > The framework is under a **BETA** release.
 
-## Features
+# Why should you choose SwifltyS2?
 
-- **C# Plugin Development**: Write plugins in C# with full .NET support
-- **Comprehensive API**: Access to game events, player management, and server control
-- **High Performance**: Native C++ core with optimized plugin execution
-- **Memory Safety**: Built-in memory management and thread-safe operations
-- **Hot Reload**: Reload plugins without restarting the server
-- **Cross-Platform**: Supports Windows and Linux
-- **Source 2 Ready**: Designed specifically for Source 2 engine games
+SwifltyS2 is built with developers in mind, providing an extensive suite of scripting features that make plugin development faster and more efficient.
+
+We're preventing memory leaks when working with the game's SDK and functions, having active maintenance and faster execution speeds through natives which are calling directly Native (core) code.
+
+A list of features:
+- **Commands**: Handles custom console commands or chat-based commands in the game.
+- **Convars**: Manages console variables (cvars) to control game behavior and configuration.
+- **Database**: Provides access to a centralized space to store your database credentials.
+- **Entity System**: Handles creation, management, and interaction of game entities.
+- **Events**: Manages event hooks, allowing scripts to react to in-game occurrences.
+- **GameEvents**: Handles triggering and listening for in-game events. All fields are typed.
+- **Memory**: Provides low-level memory manipulation tools for advanced scripting.
+- **Menus**: Provides a easy Menu API with tons of customization, from colors to options and much more.
+- **Hooks**: A hooking system to hook functions, net messages, entity outputs and more.
+- **NetMessages**: Facilitates sending and receiving network messages via protobuf to clients.
+- **Profiler**: Tools for performance analysis and debugging of scripts.
+- **ProtobufDefinitions**: Types for NetMessages received or sent by the server.
+- **Scheduler**: Provides timers and scheduling functionality for deferred or repeated tasks.
+- **SchemaDefinitions**: Defines the SDK Schema classes and enums.
+- **Schemas**: Schema class helpers for working with Game's SDK.
+- **Sounds**: Provides tools for playing and managing audio within the game.
 
 ## Supported Games
 

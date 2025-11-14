@@ -126,6 +126,8 @@ void CPlayer::Shutdown()
     }
 }
 
+extern INetworkMessages* networkMessages;
+
 void CPlayer::SendMsg(MessageType type, const std::string& message, int duration = 5000)
 {
     if (IsFakeClient()) return;
@@ -160,7 +162,6 @@ void CPlayer::SendMsg(MessageType type, const std::string& message, int duration
             if (startsWithColor) msg = " " + msg;
         }
 
-        auto networkMessages = g_ifaceService.FetchInterface<INetworkMessages>(NETWORKMESSAGES_INTERFACE_VERSION);
         auto gameEventSystem = g_ifaceService.FetchInterface<IGameEventSystem>(GAMEEVENTSYSTEM_INTERFACE_VERSION);
 
         auto netmsg = networkMessages->FindNetworkMessagePartial("TextMsg");
