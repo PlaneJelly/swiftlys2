@@ -359,8 +359,8 @@ internal static class GameFunctions
         {
             unsafe
             {
-                var pDropWeapon = (delegate* unmanaged< nint, nint, void >)GetVirtualFunction(pThis, DropWeaponOffset);
-                pDropWeapon(pThis, pWeapon);
+                var pDropWeapon = (delegate* unmanaged< nint, nint, nint, nint, void >)GetVirtualFunction(pThis, DropWeaponOffset);
+                pDropWeapon(pThis, pWeapon, 0, 0);
             }
         }
         catch (Exception e)
