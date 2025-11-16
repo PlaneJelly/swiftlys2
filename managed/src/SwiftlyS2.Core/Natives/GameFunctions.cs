@@ -16,7 +16,7 @@ internal static class GameFunctions
     public static unsafe delegate* unmanaged< nint, nint, float, void > pSetOrAddAttribute;
     public static unsafe delegate* unmanaged< int, nint, nint > pGetWeaponCSDataFromKey;
     public static unsafe delegate* unmanaged< nint, uint, nint, byte, CUtlSymbolLarge, byte, int, nint, nint, void > pDispatchParticleEffect;
-    public static unsafe delegate* unmanaged< nint, uint, float, nint, byte, void > pTerminateRound;
+    public static unsafe delegate* unmanaged< nint, float, uint, nint, byte, void > pTerminateRound;
     public static unsafe delegate* unmanaged< nint, Vector*, QAngle*, Vector*, void > pTeleport;
     public static int TeleportOffset => NativeOffsets.Fetch("CBaseEntity::Teleport");
     public static int CommitSuicideOffset => NativeOffsets.Fetch("CBasePlayerPawn::CommitSuicide");
@@ -43,7 +43,7 @@ internal static class GameFunctions
             pSetOrAddAttribute = (delegate* unmanaged< nint, IntPtr, float, void >)NativeSignatures.Fetch("CAttributeList::SetOrAddAttributeValueByName");
             pGetWeaponCSDataFromKey = (delegate* unmanaged< int, nint, nint >)NativeSignatures.Fetch("GetWeaponCSDataFromKey");
             pDispatchParticleEffect = (delegate* unmanaged< nint, uint, nint, byte, CUtlSymbolLarge, byte, int, nint, nint, void >)NativeSignatures.Fetch("DispatchParticleEffect");
-            pTerminateRound = (delegate* unmanaged< nint, uint, float, nint, byte, void >)NativeSignatures.Fetch("CGameRules::TerminateRound");
+            pTerminateRound = (delegate* unmanaged< nint, float, uint, nint, byte, void >)NativeSignatures.Fetch("CGameRules::TerminateRound");
             pTeleport = (delegate* unmanaged< nint, Vector*, QAngle*, Vector*, void >)((void**)NativeMemoryHelpers.GetVirtualTableAddress("server", "CBaseEntity"))[TeleportOffset];
         }
     }
@@ -60,7 +60,7 @@ internal static class GameFunctions
         {
             unsafe
             {
-                pTerminateRound(gameRules, reason, delay, 0, 0);
+                pTerminateRound(gameRules, delay, reason, 0, 0);
             }
         }
         catch (Exception e)

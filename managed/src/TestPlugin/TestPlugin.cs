@@ -621,6 +621,12 @@ public class TestPlugin : BasePlugin
 
     //     Core.Menus.OpenMenu(player, settingsMenu);
     // }
+    [Command("ed")]
+    public void EndRoundCommand( ICommandContext _ )
+    {
+        var gameRules = Core.EntitySystem.GetGameRules()!;
+        gameRules.TerminateRound(RoundEndReason.CTsWin, 10.0f);
+    }
 
     [Command("tm")]
     public void TestMenuCommand( ICommandContext context )
