@@ -11,6 +11,8 @@ public interface IPlugin
 
   public void OnSharedInterfaceInjected( IInterfaceManager interfaceManager );
 
+  public void OnAllPluginsLoaded();
+
   public void Load( bool hotReload );
 
   public void Unload();

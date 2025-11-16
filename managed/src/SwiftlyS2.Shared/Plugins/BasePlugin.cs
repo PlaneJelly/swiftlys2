@@ -35,6 +35,8 @@ public abstract class BasePlugin : IPlugin
 
   public virtual void OnSharedInterfaceInjected( IInterfaceManager interfaceManager ) { }
 
+  public virtual void OnAllPluginsLoaded() { }
+
   public abstract void Load( bool hotReload );
 
   public abstract void Unload();
