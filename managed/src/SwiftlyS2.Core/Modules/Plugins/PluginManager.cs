@@ -288,6 +288,11 @@ internal class PluginManager
         LoadPluginsFromFolder(_RootDirService.GetPluginsRoot());
 
         RebuildSharedServices();
+
+        _Plugins
+          .Where(p => p.Status == PluginStatus.Loaded)
+          .ToList()
+          .ForEach(p => p.Plugin!.OnAllPluginsLoaded());
     }
 
     public List<PluginContext> GetPlugins()
@@ -311,6 +316,11 @@ internal class PluginManager
           .Where(p => p.Status == PluginStatus.Loaded)
           .ToList()
           .ForEach(p => p.Plugin!.UseSharedInterface(_InterfaceManager));
+
+        _Plugins
+            .Where(p => p.Status == PluginStatus.Loaded)
+            .ToList()
+            .ForEach(p => p.Plugin!.OnSharedInterfaceInjected(_InterfaceManager));
     }
 
 

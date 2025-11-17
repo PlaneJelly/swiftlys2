@@ -13,6 +13,12 @@ public class EventDelegates
   public delegate void OnTick();
 
   /// <summary>
+  /// Called when the world is updated. This happens even in hibernation.
+  /// This callback is a hot path, be careful with it and don't do anything expensive.
+  /// </summary>
+  public delegate void OnWorldUpdate();
+
+  /// <summary>
   /// Called when Steam API is activated.
   /// </summary>
   public delegate void OnSteamAPIActivated();
@@ -145,4 +151,9 @@ public class EventDelegates
   /// Called when a command is executed.
   /// </summary>
   public delegate void OnCommandExecuteHook( IOnCommandExecuteHookEvent @event );
+
+  /// <summary>
+  /// Called when the movement services run command hook is triggered.
+  /// </summary>
+  public delegate void OnMovementServicesRunCommandHook( IOnMovementServicesRunCommandHookEvent @event );
 }

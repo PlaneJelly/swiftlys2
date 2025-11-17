@@ -26,6 +26,7 @@ internal class EventSubscriber : IEventSubscriber, IDisposable
   }
 
   public event EventDelegates.OnTick? OnTick;
+  public event EventDelegates.OnWorldUpdate? OnWorldUpdate;
 
   public event EventDelegates.OnClientConnected? OnClientConnected;
 
@@ -55,6 +56,7 @@ internal class EventSubscriber : IEventSubscriber, IDisposable
   public event EventDelegates.OnConsoleOutput? OnConsoleOutput;
   public event EventDelegates.OnCommandExecuteHook? OnCommandExecuteHook;
   public event EventDelegates.OnSteamAPIActivated? OnSteamAPIActivated;
+  public event EventDelegates.OnMovementServicesRunCommandHook? OnMovementServicesRunCommandHook;
 
   public void Dispose()
   {
@@ -75,6 +77,23 @@ internal class EventSubscriber : IEventSubscriber, IDisposable
     finally
     {
       _Profiler.StopRecording("Event::OnTick");
+    }
+  }
+
+  public void InvokeOnWorldUpdate()
+  {
+    try
+    {
+      _Profiler.StartRecording("Event::OnWorldUpdate");
+      OnWorldUpdate?.Invoke();
+    }
+    catch (Exception e)
+    {
+      if (GlobalExceptionHandler.Handle(e)) _Logger.LogError(e, "Error invoking OnWorldUpdate.");
+    }
+    finally
+    {
+      _Profiler.StopRecording("Event::OnWorldUpdate");
     }
   }
 
@@ -561,6 +580,24 @@ internal class EventSubscriber : IEventSubscriber, IDisposable
     finally
     {
       _Profiler.StopRecording("Event::OnCommandExecuteHook");
+    }
+  }
+
+  public void InvokeOnMovementServicesRunCommandHook( OnMovementServicesRunCommandHookEvent @event )
+  {
+    try
+    {
+      if (OnMovementServicesRunCommandHook == null) return;
+      _Profiler.StartRecording("Event::OnMovementServicesRunCommandHook");
+      OnMovementServicesRunCommandHook?.Invoke(@event);
+    }
+    catch (Exception e)
+    {
+      if (GlobalExceptionHandler.Handle(e)) _Logger.LogError(e, "Error invoking OnMovementServicesRunCommandHook.");
+    }
+    finally
+    {
+      _Profiler.StopRecording("Event::OnMovementServicesRunCommandHook");
     }
   }
 }

@@ -13,6 +13,12 @@ public interface IEventSubscriber
   public event EventDelegates.OnTick? OnTick;
 
   /// <summary>
+  /// Called when the world is updated. This happens even in hibernation.
+  /// This callback is a hot path, be careful with it and don't do anything expensive.
+  /// </summary>
+  public event EventDelegates.OnWorldUpdate? OnWorldUpdate;
+
+  /// <summary>
   /// Called when Steam API is activated.
   /// </summary>
   public event EventDelegates.OnSteamAPIActivated? OnSteamAPIActivated;
@@ -145,4 +151,9 @@ public interface IEventSubscriber
   /// Called when an entity ends touching another entity.
   /// </summary>
   public event EventDelegates.OnEntityEndTouch? OnEntityEndTouch;
+
+  /// <summary>
+  /// Called when the movement services run command hook is triggered.
+  /// </summary>
+  public event EventDelegates.OnMovementServicesRunCommandHook? OnMovementServicesRunCommandHook;
 }
