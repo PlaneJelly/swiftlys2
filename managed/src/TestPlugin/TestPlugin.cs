@@ -641,7 +641,8 @@ public class TestPlugin : BasePlugin
     public void EndRoundCommand( ICommandContext _ )
     {
         var gameRules = Core.EntitySystem.GetGameRules()!;
-        gameRules.TerminateRound(RoundEndReason.CTsWin, 10.0f);
+        // gameRules.TerminateRound(RoundEndReason.CTsWin, 10.0f);
+        gameRules.AddCTWins(1);
     }
 
     [Command("tm")]

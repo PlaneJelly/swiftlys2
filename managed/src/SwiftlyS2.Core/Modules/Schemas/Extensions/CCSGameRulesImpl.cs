@@ -9,12 +9,21 @@ internal partial class CCSGameRulesImpl : CCSGameRules
 {
     public T? FindPickerEntity<T>( CBasePlayerController controller ) where T : ISchemaClass<T>
     {
-        CBaseEntity ent = new CBaseEntityImpl(GameFunctions.FindPickerEntity(Address, controller.Address));
-        return ent.As<T>();
+        return ((CBaseEntity)new CBaseEntityImpl(GameFunctions.FindPickerEntity(Address, controller.Address))).As<T>();
     }
 
     public void TerminateRound( RoundEndReason reason, float delay )
     {
         GameFunctions.TerminateRound(Address, (uint)reason, delay);
+    }
+
+    public void AddTerroristWins( short wins )
+    {
+        GameFunctions.AddTerroristWins(Address, wins);
+    }
+
+    public void AddCTWins( short wins )
+    {
+        GameFunctions.AddCTWins(Address, wins);
     }
 }

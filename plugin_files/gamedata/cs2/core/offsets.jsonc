@@ -175,5 +175,9 @@
     "CBaseEntity::EndTouch": {
         "windows": 155,
         "linux": 154
+    },
+    "CGameRules::Unk01": {
+        "windows": 3828,
+        "linux": 0
     }
 }
