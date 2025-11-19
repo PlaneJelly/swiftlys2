@@ -1,6 +1,7 @@
 // Reference: https://github.com/KZGlobalTeam/cs2kz-metamod/blob/8d4038394173f1c10d763346d45cd3ccbc0091aa/src/sdk/datatypes.h#L165-L250
 
 using System.Runtime.InteropServices;
+using SwiftlyS2.Shared.Misc;
 using SwiftlyS2.Shared.SchemaDefinitions;
 
 namespace SwiftlyS2.Shared.Natives;
@@ -8,17 +9,16 @@ namespace SwiftlyS2.Shared.Natives;
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct CMoveDataBase
 {
-    // Bitfield members
-    private byte _bitfield0;
+    private byte _bitfield0; // Bitfield members
 
     public bool HasZeroFrametime {
-        get => (_bitfield0 & 0x01) != 0;
-        set => _bitfield0 = (byte)(value ? (_bitfield0 | 0x01) : (_bitfield0 & ~0x01));
+        get => BitFieldHelper.GetBit(ref _bitfield0, 0);
+        set => BitFieldHelper.SetBit(ref _bitfield0, 0, value);
     }
 
     public bool IsLateCommand {
-        get => (_bitfield0 & 0x02) != 0;
-        set => _bitfield0 = (byte)(value ? (_bitfield0 | 0x02) : (_bitfield0 & ~0x02));
+        get => BitFieldHelper.GetBit(ref _bitfield0, 1);
+        set => BitFieldHelper.SetBit(ref _bitfield0, 1, value);
     }
 
     public CHandle<CCSPlayerPawn> PlayerHandle;
