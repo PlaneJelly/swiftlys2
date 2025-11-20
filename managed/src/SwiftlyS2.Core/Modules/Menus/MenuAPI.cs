@@ -479,6 +479,7 @@ internal sealed class MenuAPI : IMenuAPI, IDisposable
         if (keyExists)
         {
             NativePlayer.ClearCenterMenuRender(player.PlayerID);
+            core.Scheduler.NextTick(() => NativePlayer.ClearCenterMenuRender(player.PlayerID));
         }
 
         SetFreezeState(player, false);
