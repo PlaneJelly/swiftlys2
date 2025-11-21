@@ -31,7 +31,7 @@ internal sealed class DynamicTextUpdater : IDisposable
 
         processor = new();
         cancellationTokenSource = new();
-        pauseSemaphore = new(0); // Initially paused (0 count), need manual Resume() to start
+        pauseSemaphore = new(0, 1); // Initially paused (0 count), need manual Resume() to start
 
         _ = Task.Run(() => UpdateLoopAsync(updateIntervalMs, pauseIntervalMs, cancellationTokenSource.Token), cancellationTokenSource.Token);
     }
@@ -63,18 +63,26 @@ internal sealed class DynamicTextUpdater : IDisposable
 
     public void Pause()
     {
-        if (!disposed && pauseSemaphore.CurrentCount > 0)
+        try
         {
-            pauseSemaphore.Wait();
+            if (!disposed)
+            {
+                pauseSemaphore.Wait();
+            }
         }
+        catch { }
     }
 
     public void Resume()
     {
-        if (!disposed && pauseSemaphore.CurrentCount == 0)
+        try
         {
-            _ = pauseSemaphore.Release();
+            if (!disposed)
+            {
+                _ = pauseSemaphore.Release();
+            }
         }
+        catch { }
     }
 
     private async Task UpdateLoopAsync( int intervalMs, int pauseIntervalMs, CancellationToken token )
