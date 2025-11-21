@@ -89,8 +89,7 @@ internal sealed class DynamicTextUpdater : IDisposable
         // Check if enough time has passed since last update
         if (lastUpdateTime != DateTime.MinValue)
         {
-            var elapsed = (now - lastUpdateTime).TotalMilliseconds;
-            if (elapsed < updateIntervalMs)
+            if ((now - lastUpdateTime).TotalMilliseconds < updateIntervalMs)
             {
                 return;
             }

@@ -260,8 +260,8 @@ internal sealed class MenuAPI : IMenuAPI, IDisposable
         {
             try
             {
-                const string category = "MenuAPI::UpdateDynamicText";
-                core.Profiler.StartRecording(category);
+                // const string category = "MenuAPI::UpdateDynamicText";
+                // core.Profiler.StartRecording(category);
 
                 foreach (var option in options)
                 {
@@ -271,7 +271,7 @@ internal sealed class MenuAPI : IMenuAPI, IDisposable
                     }
                 }
 
-                core.Profiler.StopRecording(category);
+                // core.Profiler.StopRecording(category);
             }
             catch
             { }
