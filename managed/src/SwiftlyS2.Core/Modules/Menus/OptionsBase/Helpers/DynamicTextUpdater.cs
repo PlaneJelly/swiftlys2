@@ -1,5 +1,4 @@
 using SwiftlyS2.Shared.Menus;
-using System.Threading;
 
 namespace SwiftlyS2.Core.Menus.OptionsBase.Helpers;
 
