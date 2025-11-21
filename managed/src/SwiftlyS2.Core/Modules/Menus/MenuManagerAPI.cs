@@ -1,12 +1,11 @@
 using System.Globalization;
 using System.Collections.Concurrent;
-using SwiftlyS2.Core.Natives;
 using SwiftlyS2.Shared;
+using SwiftlyS2.Core.Natives;
 using SwiftlyS2.Shared.Menus;
 using SwiftlyS2.Shared.Events;
 using SwiftlyS2.Shared.Sounds;
 using SwiftlyS2.Shared.Players;
-using SwiftlyS2.Shared.SchemaDefinitions;
 
 namespace SwiftlyS2.Core.Menus;
 
@@ -15,7 +14,7 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
     /// <summary>
     /// The SwiftlyS2 core instance.
     /// </summary>
-    public ISwiftlyCore Core { get; init; }
+    public ISwiftlyCore Core { get; internal set; } = default!;
 
     /// <summary>
     /// Global Configuration settings for all menus.
@@ -64,10 +63,8 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
         ["f"] = KeyBind.F,
     };
 
-    public MenuManagerAPI( ISwiftlyCore core )
+    public MenuManagerAPI()
     {
-        Core = core;
-
         var settings = NativeEngineHelpers.GetMenuSettings().Trim().Split('\x01');
         Configuration = new MenuManagerConfiguration {
             NavigationPrefix = settings[0],
@@ -98,10 +95,6 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
 
         openMenus.Clear();
         onClosedCallbacks.Clear();
-
-        Core.Event.OnClientKeyStateChanged += KeyStateChange;
-        Core.Event.OnClientDisconnected += OnClientDisconnected;
-        Core.Event.OnMapUnload += OnMapUnload;
     }
 
     ~MenuManagerAPI()
@@ -110,13 +103,9 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
 
         openMenus.Clear();
         onClosedCallbacks.Clear();
-
-        Core.Event.OnClientKeyStateChanged -= KeyStateChange;
-        Core.Event.OnClientDisconnected -= OnClientDisconnected;
-        Core.Event.OnMapUnload -= OnMapUnload;
     }
 
-    private void KeyStateChange( IOnClientKeyStateChangedEvent @event )
+    internal void OnClientKeyStateChanged( IOnClientKeyStateChangedEvent @event )
     {
         if (openMenus.IsEmpty)
         {
@@ -239,19 +228,29 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
         }
     }
 
-    private void OnClientDisconnected( IOnClientDisconnectedEvent @event )
+    internal void OnClientDisconnected( IOnClientDisconnectedEvent @event )
     {
+        var stackTrace = new System.Diagnostics.StackTrace(true);
         var player = Core.PlayerManager.GetPlayer(@event.PlayerId);
         if (player != null)
         {
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] OnClientDisconnected {player.Controller?.PlayerName} (PlayerID: {player.PlayerID})");
+            Console.WriteLine($"Total openMenus count: {openMenus.Count}");
+            Console.WriteLine("=== All openMenus mappings ===");
+            foreach (var kvp in openMenus)
+            {
+                Console.WriteLine($"Player: {kvp.Key.Controller?.PlayerName} (ID: {kvp.Key.PlayerID}) -> Menu: {kvp.Value.Configuration.Title}");
+            }
+            Console.WriteLine("==============================");
+            Console.WriteLine($"Stack trace: {stackTrace}");
             openMenus
                 .Where(kvp => kvp.Key == player)
                 .ToList()
-                .ForEach(kvp => CloseMenuForPlayerInternal(player, kvp.Value, true));
+                .ForEach(kvp => CloseMenuForPlayerInternal(kvp.Key, kvp.Value, false));
         }
     }
 
-    private void OnMapUnload( IOnMapUnloadEvent _ )
+    internal void OnMapUnload( IOnMapUnloadEvent _ )
     {
         CloseAllMenus();
     }
@@ -383,6 +382,8 @@ internal sealed class MenuManagerAPI : IMenuManagerAPI
 
     private void CloseMenuForPlayerInternal( IPlayer player, IMenuAPI menu, bool reopenParent )
     {
+        Console.WriteLine($"CloseMenuForPlayerInternal {player.Controller?.PlayerName} {menu.Configuration.Title}");
+
         if (!openMenus.TryGetValue(player, out var currentMenu) || currentMenu != menu)
         {
             return;

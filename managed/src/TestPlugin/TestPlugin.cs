@@ -639,7 +639,7 @@ public class TestPlugin : BasePlugin
     // }
 
     [Command("ed")]
-    public void EndRoundCommand( ICommandContext _ )
+    public void EmitGrenadeCommand( ICommandContext _ )
     {
         var smoke = CSmokeGrenadeProjectile.EmitGrenade(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), Team.CT, null);
     }
