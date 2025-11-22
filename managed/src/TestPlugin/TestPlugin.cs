@@ -253,19 +253,19 @@ public class TestPlugin : BasePlugin
         };
 
         var convar = Core.ConVar.Find<float>("sv_cs_player_speed_has_hostage");
-        Core.Event.OnTick += () =>
-        {
-            var players = Core.PlayerManager.GetAllPlayers();
-            foreach (var player in players)
-            {
-                Core.Profiler.StartRecording("OnTick Send 1024 sv_cs_player_speed_has_hostage convar at player");
-                for (int i = 0; i < 1024; i++)
-                {
-                    convar!.ReplicateToClient(player.PlayerID, (float)Random.Shared.NextDouble());
-                }
-                Core.Profiler.StopRecording("OnTick Send 1024 sv_cs_player_speed_has_hostage convar at player");
-            }
-        };
+        // Core.Event.OnTick += () =>
+        // {
+        //     var players = Core.PlayerManager.GetAllPlayers();
+        //     foreach (var player in players)
+        //     {
+        //         Core.Profiler.StartRecording("OnTick Send 1024 sv_cs_player_speed_has_hostage convar at player");
+        //         for (int i = 0; i < 1024; i++)
+        //         {
+        //             convar!.ReplicateToClient(player.PlayerID, (float)Random.Shared.NextDouble());
+        //         }
+        //         Core.Profiler.StopRecording("OnTick Send 1024 sv_cs_player_speed_has_hostage convar at player");
+        //     }
+        // };
 
         // Core.Event.OnClientProcessUsercmds += (@event) => {
         //   foreach(var usercmd in @event.Usercmds) {
@@ -281,9 +281,12 @@ public class TestPlugin : BasePlugin
         //   return HookResult.Continue;
         // });
 
-        // Core.Event.OnEntityTakeDamage += (@event) => {
-        //   Console.WriteLine("TestPlugin OnEntityTakeDamage " + @event.Entity.Entity?.DesignerName + " " + @event.Info.HitGroupId);
-        // };
+        Core.Event.OnEntityTakeDamage += ( @event ) =>
+        {
+            Console.WriteLine(@event.Entity.DesignerName);
+            @event.Info.DamageFlags = TakeDamageFlags_t.DFLAG_SUPPRESS_BREAKABLES;
+            @event.Result = HookResult.Stop;
+        };
 
         // Core.Event.OnTick += () => {
 
