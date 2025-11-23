@@ -97,17 +97,6 @@ public class TestPlugin : BasePlugin
 
     public override void Load( bool hotReload )
     {
-        var targetAddress = Core.Memory.GetAddressBySignature(Library.Server, "E8 ? ? ? ? 48 8B 46 ? 48 85 DB");
-        if (targetAddress.HasValue)
-        {
-            var unmanagedMemory = Core.Memory.GetUnmanagedMemoryByAddress(targetAddress.Value);
-            var hookId = unmanagedMemory.AddHook(( ref MidHookContext context ) =>
-            {
-                Console.WriteLine($"Mid-hook triggered at 0x{targetAddress.Value:X}");
-                Console.WriteLine($"RAX: 0x{context.RAX:X}, RCX: 0x{context.RCX:X}, RDX: 0x{context.RDX:X}");
-            });
-        }
-
         // Core.Command.HookClientCommand((playerId, commandLine) =>
         // {
         //   Console.WriteLine("TestPlugin HookClientCommand " + playerId + " " + commandLine);
@@ -370,6 +359,21 @@ public class TestPlugin : BasePlugin
     int order = 0;
 
     IUnmanagedFunction<DispatchSpawnDelegate>? _dispatchspawn;
+
+    [Command("h0")]
+    public void TestCommand0( ICommandContext _ )
+    {
+        var targetAddress = Core.Memory.GetAddressBySignature(Library.Server, "E8 ? ? ? ? 48 8B 46 ? 48 85 DB");
+        if (targetAddress.HasValue)
+        {
+            var unmanagedMemory = Core.Memory.GetUnmanagedMemoryByAddress(targetAddress.Value);
+            var hookId = unmanagedMemory.AddHook(( ref MidHookContext context ) =>
+            {
+                Console.WriteLine($"Mid-hook triggered at 0x{targetAddress.Value:X}");
+                Console.WriteLine($"RAX: 0x{context.RAX:X}, RCX: 0x{context.RCX:X}, RDX: 0x{context.RDX:X}");
+            });
+        }
+    }
 
     [Command("h1")]
     public void TestCommand2( ICommandContext _ )
