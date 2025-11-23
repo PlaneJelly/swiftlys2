@@ -639,10 +639,29 @@ public class TestPlugin : BasePlugin
     // }
 
     [Command("ed")]
-    public void EmitGrenadeCommand( ICommandContext _ )
+    public void EmitGrenadeCommand( ICommandContext context )
     {
         var smoke = CSmokeGrenadeProjectile.EmitGrenade(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), Team.CT, null);
         smoke.Despawn();
+        smoke.SetTransmitState(true, context.Sender!.PlayerID);
+    }
+
+    [Command("hbw")]
+    public void HideBotWeapon( ICommandContext context )
+    {
+        Core.PlayerManager.GetAlive()
+            .Where(player => player.PlayerID != context.Sender!.PlayerID && player.IsValid && player.IsFakeClient)
+            .ToList()
+            .ForEach(player => player.PlayerPawn!.WeaponServices!.ActiveWeapon.Value!.SetTransmitState(false, context.Sender!.PlayerID));
+    }
+
+    [Command("hb")]
+    public void HideBot( ICommandContext context )
+    {
+        Core.PlayerManager.GetAlive()
+            .Where(player => player.PlayerID != context.Sender!.PlayerID && player.IsValid && player.IsFakeClient)
+            .ToList()
+            .ForEach(player => player.PlayerPawn!.SetTransmitState(false, context.Sender!.PlayerID));
     }
 
     [Command("ss")]
