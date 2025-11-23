@@ -355,8 +355,6 @@ public class TestPlugin : BasePlugin
     {
         var ret = SteamGameServerUGC.DownloadItem(new PublishedFileId_t(3596198331), true);
         Console.WriteLine(SteamGameServer.GetPublicIP().ToIPAddress());
-
-
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -365,8 +363,23 @@ public class TestPlugin : BasePlugin
 
     IUnmanagedFunction<DispatchSpawnDelegate>? _dispatchspawn;
 
+    [Command("h0")]
+    public void TestCommand0( ICommandContext _ )
+    {
+        var targetAddress = Core.Memory.GetAddressBySignature(Library.Server, "E8 ? ? ? ? 48 8B 46 ? 48 85 DB");
+        if (targetAddress.HasValue)
+        {
+            var unmanagedMemory = Core.Memory.GetUnmanagedMemoryByAddress(targetAddress.Value);
+            var hookId = unmanagedMemory.AddHook(( ref MidHookContext context ) =>
+            {
+                Console.WriteLine($"Mid-hook triggered at 0x{targetAddress.Value:X}");
+                Console.WriteLine($"RAX: 0x{context.RAX:X}, RCX: 0x{context.RCX:X}, RDX: 0x{context.RDX:X}");
+            });
+        }
+    }
+
     [Command("h1")]
-    public void TestCommand2( ICommandContext context )
+    public void TestCommand2( ICommandContext _ )
     {
         // var token = Core.Scheduler.DelayAndRepeat(500, 1000, () =>
         // {
@@ -374,8 +387,8 @@ public class TestPlugin : BasePlugin
         // });
 
         var addres = Core.GameData.GetSignature("CBaseEntity::DispatchSpawn");
-        var func = Core.Memory.GetUnmanagedFunctionByAddress<DispatchSpawnDelegate>(addres);
 
+        var func = Core.Memory.GetUnmanagedFunctionByAddress<DispatchSpawnDelegate>(addres);
         var guid = func.AddHook(( next ) =>
         {
             return ( pEntity, pKV ) =>
@@ -385,15 +398,20 @@ public class TestPlugin : BasePlugin
             };
         });
 
-        _dispatchspawn.AddHook(( next ) =>
+        var memory = Core.Memory.GetUnmanagedMemoryByAddress(addres);
+        var guid1 = memory.AddHook(( ref MidHookContext context ) =>
         {
-            return ( pEntity, pKV ) =>
-            {
-                Console.WriteLine("TestPlugin DispatchSpawn2 " + order++);
-                return next()(pEntity, pKV);
-            };
+            Core.Logger.LogInformation("MidHookContext:\n{Context}", context);
         });
 
+        // _dispatchspawn.AddHook(( next ) =>
+        // {
+        //     return ( pEntity, pKV ) =>
+        //     {
+        //         Console.WriteLine("TestPlugin DispatchSpawn2 " + order++);
+        //         return next()(pEntity, pKV);
+        //     };
+        // });
     }
 
     [EventListener<EventDelegates.OnEntityCreated>]
@@ -1003,6 +1021,17 @@ public class TestPlugin : BasePlugin
         }
 
         Core.MenusAPI.OpenMenuForPlayer(context.Sender!, mainMenu.Build());
+    }
+
+    [Command("tb2m")]
+    public void TeleportBotToMeCommand( ICommandContext context )
+    {
+        var player = context.Sender!;
+        Core.PlayerManager.GetAllPlayers()
+            .Where(p => p.IsValid && p.IsFakeClient)
+            .ToList()
+            .FirstOrDefault()
+            ?.Teleport(player.PlayerPawn!.AbsOrigin!.Value, player.PlayerPawn!.EyeAngles, Vector.Zero);
     }
 
     public override void Unload()
