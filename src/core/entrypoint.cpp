@@ -125,6 +125,10 @@ bool SwiftlyCore::Load(BridgeKind_t kind)
     if (!ends_with(m_sCorePath, WIN_LINUX("\\", "/")))
         m_sCorePath += WIN_LINUX("\\", "/");
 
+    m_sLogPath = CommandLine()->ParmValue(CUtlStringToken("-sw_logpath"), WIN_LINUX("addons\\swiftlys2\\logs", "addons/swiftlys2/logs"));
+    if (!ends_with(m_sLogPath, WIN_LINUX("\\", "/")))
+        m_sLogPath += WIN_LINUX("\\", "/");
+
     auto configuration = g_ifaceService.FetchInterface<IConfiguration>(CONFIGURATION_INTERFACE_VERSION);
     configuration->InitializeExamples();
 
@@ -231,7 +235,7 @@ bool SwiftlyCore::Load(BridgeKind_t kind)
         crashreporter->ReportPreventionIncident("Managed", fmt::format("Couldn't initialize the .NET runtime. Make sure you installed `swiftlys2-{}-{}-with-runtimes.zip`.", WIN_LINUX("windows", "linux"), GetVersion()));
         return true;
     }
-    if (!InitializeDotNetAPI(scripting->GetNativeFunctions(), scripting->GetNativeFunctionsCount()))
+    if (!InitializeDotNetAPI(scripting->GetNativeFunctions(), scripting->GetNativeFunctionsCount(), std::string(Plat_GetGameDirectory()) + "/csgo/" + m_sLogPath))
     {
         auto crashreporter = g_ifaceService.FetchInterface<ICrashReporter>(CRASHREPORTER_INTERFACE_VERSION);
         crashreporter->ReportPreventionIncident("Managed", "Couldn't initialize the .NET scripting API.");

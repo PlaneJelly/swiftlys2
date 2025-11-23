@@ -37,7 +37,7 @@ internal static class Bootstrap
         return IntPtr.Zero;
     }
 
-    public static void Start( IntPtr nativeTable, int nativeTableSize, string basePath )
+    public static void Start( IntPtr nativeTable, int nativeTableSize, string basePath, string logPath )
     {
         Environment.SetEnvironmentVariable("SWIFTLY_MANAGED_ROOT", basePath);
         NativeBinding.BindNatives(nativeTable, nativeTableSize);
@@ -45,7 +45,7 @@ internal static class Bootstrap
 
         EventPublisher.Register();
         GameFunctions.Initialize();
-        FileLogger.Initialize(basePath);
+        FileLogger.Initialize(logPath);
 
         AnsiConsole.Write(new FigletText("SwiftlyS2").LeftJustified().Color(Color.LightSteelBlue1));
 
