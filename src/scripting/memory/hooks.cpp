@@ -35,8 +35,7 @@ void* Bridge_Hooks_AllocateVHook()
 void* Bridge_Hooks_AllocateMHook()
 {
     auto hooksmanager = g_ifaceService.FetchInterface<IHooksManager>(HOOKSMANAGER_INTERFACE_VERSION);
-    auto result = hooksmanager->CreateMFunctionHook();
-    return result;
+    return hooksmanager->CreateMFunctionHook();
 }
 
 void Bridge_Hooks_DeallocateHook(void* hook)
